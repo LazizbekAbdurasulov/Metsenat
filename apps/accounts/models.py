@@ -1,8 +1,7 @@
-from re import T
-import re
-from statistics import mode
-from django.core.validators import MinValueValidator, MaxValueValidator
+from doctest import FAIL_FAST
 from django.db import models
+
+from apps.accounts.validators import phone_number
 
 class Universities(models.Model):
     name = models.CharField(max_length=256, null=False, blank=False)
@@ -24,10 +23,8 @@ class Student(models.Model):
     last_name = models.CharField(max_length=32, null=False, blank=False)
     university = models.ForeignKey(Universities, on_delete=models.CASCADE)
     degree = models.CharField(max_length=32, choices=TYPE_DEGREE.choices, default=TYPE_DEGREE.BACHELOR, null=False, blank=False)
-    course = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(4)])
     amount = models.IntegerField(null=False, blank=False)
     phone_number = models.IntegerField(null=False, blank=False)
-    email = models.EmailField(max_length=48, null=False, blank=False)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -52,9 +49,10 @@ class Sponsor(models.Model):
     full_name = models.CharField(max_length=256, null=False, blank=False)
     sponsor_type = models.CharField(max_length=32, choices=TYPE_PERSON.choices, default=TYPE_PERSON.LEGAL, null=False, blank=False)
     amount = models.IntegerField(null=False, blank=False)
+    phone_number = models.IntegerField(null=False, blank=False)
+    company = models.CharField(max_length=256, null=True, blank=True)
     status = models.CharField(max_length=32, choices=STATUS_CHOICE.choices, default=STATUS_CHOICE.MODERATION, null=False, blank=False)
     created_date = models.DateTimeField(auto_now_add=True)
-    company = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):
         return f"{self.full_name} - {self.amount}"
